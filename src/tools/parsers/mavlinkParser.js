@@ -205,8 +205,13 @@ export class MavlinkParser {
         self.postMessage({ percentage: 100 })
         const messageTypes = {}
         for (const msg of availableMessages) {
-            let fields = mavlink.messageFields[msg]
-            fields = fields.filter(e => e !== 'time_boot_ms' && e !== 'time_usec')
+            let fields = mavlink.messageFields[msg];
+            if (!fields) {
+                console.warn(`Skipping unknown message type: ${msg}`);
+                continue;
+            }
+
+            fields = fields.filter(e => e !== 'time_boot_ms' && e !== 'time_usec');
             const complexFields = {}
             for (const field in fields) {
                 complexFields[fields[field]] = {

@@ -22,7 +22,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     // allow async-await
-   "max-len": ["error", 120, 2, {
+   "max-len": ["error", 200, 2, {
       ignoreUrls: true,
           ignoreComments: false,
           ignoreRegExpLiterals: true,
@@ -32,7 +32,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "indent": ["error", 4],
+    "indent": "off",
     "camelcase": [2, {"properties": "always"}],
     "vue/multi-word-component-names": `off`,
     "vue/no-reserved-component-names": `off`,

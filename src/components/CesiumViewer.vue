@@ -84,9 +84,9 @@ import {
     isPointInPolygon
 } from './cesiumExtra/boundingPolygon.js'
 
-Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwMTIzNmJhM' +
-    'y1jNDE3LTQ0MzAtODVkMS1mZmUzODdjMTg0MGIiLCJpZCI6MzAzNjYzLCJpYXQiOjE3NDc2MjEzOTR9.Eu' +
-    'W7FIgBv2OzYDyy0xfCWiExKyLIK9S4qJoT4D5-qrM'
+Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+'eyJqdGkiOiJkZTQzOWY5Yi0xNjQxLTRiYmEtYjk1Ni1mZjY1MmI5OWM1ZjMiLCJpZCI6MzA5ODMwLCJpYXQiOjE3NDkyMDExNDN9.' +
+'KnlkHYO-SyMF7-HKD0y4bWqkRclYREKhOeUjKTyL3KU'
 
 const colorCoderMode = new ColorCoderMode(store)
 const colorCoderRange = new ColorCoderRange(store)
@@ -264,7 +264,7 @@ export default {
                         shadows: true,
                         // eslint-disable-next-line
                         baseLayer: new ImageryLayer.fromProviderAsync(
-                            IonImageryProvider.fromAssetId(3954)
+                            IonImageryProvider.fromAssetId(2)
                         ),
                         imageryProviderViewModels: imageryProviders,
                         orderIndependentTranslucency: false,

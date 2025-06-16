@@ -28,6 +28,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 import VProgress from './SideBarFileManagerProgressBar.vue'
 import Worker from '../tools/parsers/parser.worker.js'
 import { store } from './Globals'
@@ -63,6 +64,42 @@ export default {
         this.$eventHub.$off('open-sample')
     },
     methods: {
+        buildTelemetrySummary () {
+            const messages = this.state.messages
+
+            const gps = Array.isArray(messages.GPS) ? messages.GPS : []
+            const globalPos = messages.GLOBAL_POSITION_INT
+            const altitudes = Array.isArray(globalPos) ? globalPos.map(m => m.relative_alt / 1000) : []
+            const times = gps.map(m => m.time_usec / 1000000)
+
+            const takeoffIndex = altitudes.findIndex(a => a > 1)
+            const takeoffTime = takeoffIndex !== -1 ? times[takeoffIndex] : null
+            const maxAltitude = altitudes.length ? Math.max(...altitudes) : 0
+            const gpsLoss = gps.filter(g => g.fix_type < 3).map(m => m.time_usec / 1000000)
+            const modes = Array.isArray(messages.MODE) ? messages.MODE.map(m => m.mode) : []
+
+            return {
+                takeoffTime,
+                maxAltitude,
+                flightModes: [...new Set(modes)],
+                gpsLossTimes: gpsLoss,
+                batteryLow: Array.isArray(messages.BATTERY)
+                ? messages.BATTERY.some(m => m.voltage_battery < 10500)
+                : false,
+                flightDurationSec: times.length > 1 ? times.at(-1) - times[0] : 0
+            }
+        },
+
+        async sendTelemetrySummary () {
+        const summary = this.buildTelemetrySummary()
+        try {
+            const res = await axios.post('http://localhost:8000/api/telemetry_summary', summary)
+            console.log('Telemetry summary sent:', res.data)
+        } catch (err) {
+            console.error('Error sending telemetry summary:', err)
+        }
+        },
+
         trimFile () {
             worker.postMessage({ action: 'trimFile', time: this.state.timeRange })
         },
@@ -250,6 +287,7 @@ export default {
                 this.$eventHub.$emit('messages')
             } else if (event.data.messagesDoneLoading) {
                 this.$eventHub.$emit('messagesDoneLoading')
+                this.sendTelemetrySummary()
             } else if (event.data.messageType) {
                 this.state.messages[event.data.messageType] = event.data.messageList
                 this.$eventHub.$emit('messages')
