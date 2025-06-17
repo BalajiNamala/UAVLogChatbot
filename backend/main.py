@@ -43,7 +43,7 @@ async def extract_and_store(file: UploadFile = File(...)):
         file_bytes = await file.read()
         telemetry_summary = extract_telemetry_from_tlog(file_bytes)
         telemetry_context = telemetry_summary
-        print("Extracted Telemetry:", telemetry_summary)  # ✅ Debug print
+        print("Extracted Telemetry:", telemetry_summary)  
         return {"status": "Extracted", "data": telemetry_summary}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -55,9 +55,9 @@ async def chat(request: Request):
     data = await request.json()
     question = data.get("question", "What is your name?")
 
-    # ✅ Debug print to confirm LLM context
-    print("🧠 Telemetry context in chat:", telemetry_context)
-    print("💬 User question:", question)
+    # Debug print to confirm LLM context
+    print(" Telemetry context in chat:", telemetry_context)
+    print(" User question:", question)
 
     # Construct prompt
     prompt = f"""
