@@ -11,7 +11,14 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+Open your backend folder in a seperetae terminal and enter this following command.
+uvicorn main:app --reload --port 8000
+
+In anothet terminal following the backend path enter the following command.
+curl -X POST "http://localhost:8000/api/extract_from_tlog" -F "file=@vtol.tlog"
+
+
+# In the main terminal serve with hot reload at localhost:8080
 npm run dev
 
 # build for production with minification
